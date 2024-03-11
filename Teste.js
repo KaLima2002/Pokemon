@@ -92,6 +92,22 @@ function CreateStyle(Type1,PokedexId, Type2){
 
 }
 
+function CreateModalStyle(Type1, Type2){
+    Type1Color = TypeColor(Type1);
+    if(Type2 == undefined){
+            let Type1Html = document.getElementById(Type1+"Modal");
+            Type1Html.style.backgroundColor =Type1Color[1];
+        }
+    else if(Type2 != undefined){
+            var Type2Color = TypeColor(Type2);
+            let backgroundType1 = document.getElementById(Type1+"Modal");
+            backgroundType1.style.background =Type1Color[0];
+            let backgroundType2 = document.getElementById(Type2+"Modal");
+            backgroundType2.style.background =Type2Color[0];
+        }
+
+}
+
 
 
 async function CallAPIBase(Id) {
@@ -127,6 +143,20 @@ async function CallAPIPokedex(Id) {
 
 
 
+async function GetPokemonsEntry(Lenght) {
+    var Pokemons = [];
+    var Lenght = Lenght
+    for (var i = 0; i < Lenght; i++) {
+        let database = await CallAPIPokedex(i + 1);
+        //let Pokedex = await CallAPIPokedex(i + 1);
+        if (database != null) {
+            //database.PokedexEntry = Pokedex.PokedexEntry;
+            Pokemons.push(database);
+        }
+    }   
+    return Pokemons;
+}
+
 async function ObterPokemons(Lenght) {
     var Pokemons = [];
     var Lenght = Lenght
@@ -153,7 +183,7 @@ function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
                 <p>
                     <span id="PokedexId">#${PokedexId}</span><span id="PokemonName">${PokemonName}</span>
                 </p>
-                <p id = "PokemonTypes">
+                <p id = "PokemonTypesModal">
                     <span class="PokemonType1" id="${Type1}${PokedexId}A">${Type1}</span>
                     <span class="PokemonType2" id="${Type2}${PokedexId}A">${Type2}</span>
                 </p>
@@ -170,7 +200,7 @@ function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
                 <p>
                     <span id="PokedexId">#${PokedexId}</span><span id="PokemonName">${PokemonName}</span>
                 </p>
-                <p id = "PokemonTypes">
+                <p id = "PokemonTypesModal">
                     <span class="PokemonType1" id="${Type1}${PokedexId}">${Type1}</span>
                 </p>
             </div>
@@ -183,32 +213,46 @@ function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
     cardsContainer.appendChild(newCard);
 }
 
-function CriarModal(PokemonName,PokedexId,PokemonSprite, Type1, Type2){
+ function CriarModal(PokemonName,PokedexId,PokemonSprite,PokedexEntry, Type1, Type2){
     const modal = document.createElement('div');
     modal.id = `${PokemonName}Modal`;
     modal.className = 'modal';
     const modalContent = document.createElement('div');
     modalContent.className = 'modal-content';
+    
     if(Type2!= undefined){
         modalContent.innerHTML = `
-            <span id="close${PokemonName}">&times;</span>
-            <img src="${PokemonSprite}" id="PokemonSprite">
+        <span id="PokedexIdModal">${PokedexId}</span><span id="PokemonNameModal">${PokemonName}</span>
+        <span class= "close" id="close${PokemonName}">&times;</span>
+        <img src="${PokemonSprite}" id="PokemonSpriteModal">
+        <p id = "PokemonTypesModal">
+            <span class="PokemonType1" id="${Type1}Modal">${Type1}</span>
+            <span class="PokemonType1" id="${Type2}Modal">${Type2}</span>
+        </p>
+        <p id="PokedexEntry">${PokedexEntry}</p>
         `;
     }
     else{
         modalContent.innerHTML = `
-            <span id="close${PokemonName}">&times;</span>
-            <img src="${PokemonSprite}" id="PokemonSprite">
+            <span id="PokedexIdModal">${PokedexId}</span><span id="PokemonNameModal">${PokemonName}</span>
+            <span class= "close" id="close${PokemonName}">&times;</span>
+            <img src="${PokemonSprite}" id="PokemonSpriteModal">
+            <p id = "PokemonTypesModal">
+                <span class="PokemonType1" id="${Type1}Modal">${Type1}</span>
+            </p>
+            <p id="PokedexEntry">${PokedexEntry}</p>
+            
+
     `;
     }
 
-    modal.appendChild(modalContent);
-    document.body.appendChild(modal);
+     modal.appendChild(modalContent);
+     document.body.appendChild(modal);
 }
 
 
 window.onload = async () => {
-    var AmountPokemons = 30;
+    var AmountPokemons = 151;
     let Pokemons = await ObterPokemons(AmountPokemons);
     //console.log(Pokemons);
     for (var i = 0; i < AmountPokemons; i++) {
@@ -228,6 +272,7 @@ window.onload = async () => {
             CreateStyle(PokemonType1,PokedexId,PokemonType2);
         }
     }
+    var PokedexEntry = await GetPokemonsEntry(AmountPokemons);
 
     Pokemons.forEach(element => {
         PokemonName = CapitalizeFirsty(element.PokemonName);
@@ -238,13 +283,16 @@ window.onload = async () => {
             var ChosenSprite = PokemonDiv.querySelector("#PokemonSprite").src;
             var ChosenType1 = PokemonDiv.getElementsByClassName("PokemonType1")[0].textContent;
             var ChosenType2;
-
+            var id = ChosenId.substring(1);
+            var ChosenPokedexEntry = (PokedexEntry[id-1]).PokedexEntry;
             if(PokemonDiv.getElementsByClassName("PokemonType2").length ==1){
-                PokemonType2 = PokemonDiv.getElementsByClassName("PokemonType2")[0].textContent;
-                CriarModal(ChosenName,ChosenId,ChosenSprite,ChosenType1,ChosenType2);
+                ChosenType2 = PokemonDiv.getElementsByClassName("PokemonType2")[0].textContent;
+                CriarModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1,ChosenType2);
+                CreateModalStyle(ChosenType1,ChosenType2);
             }
             else{
-                CriarModal(ChosenName,ChosenId,ChosenSprite,ChosenType1);
+                CriarModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1);
+                CreateModalStyle(ChosenType1);
             }
             var modal = document.getElementById(`${PokemonDiv.id}Modal`);
             modal.style.display = "block";
@@ -256,7 +304,6 @@ window.onload = async () => {
             document.body.removeChild(modal)
             })
         });
-        //Teste git
     });
     
 }

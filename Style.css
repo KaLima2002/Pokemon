@@ -87,13 +87,62 @@ header {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 700px;
-    height: 700px;
-    background-color: white;
+    width: 500px;
+    height: 600px;
+    background-color: rgb(166, 210, 225);
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-bottom: 100px solid #fc0000;
+    border-left: 10px solid #050000;
+    border-right: 10px solid #050000;
+    border-top: 100px solid #fc0000;
 }
+
 .modal-content {
-    padding: 20px;
     text-align: center;
+}
+.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 50px;
+}
+#PokemonSpriteModal{
+    width: 70%;
+}
+
+#PokemonNameModal{
+    font-weight: bold;
+    font-size: 40px;
+    padding-left: 0.1em;
+    padding-right: 0.3em;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-right: 1px solid #000000;
+    background-color: #fcfcfc;
+
+}
+
+#PokedexIdModal{
+    font-weight: bold;
+    font-size: 40px;
+    padding-left: 0.1em;
+    padding-right: 0.3em;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    background-color: #fcfcfc;
+}
+
+#PokemonTypesModal{
+    font-size: 20px;
+}
+
+#PokedexEntry{
+    font-size: 25px;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    background-color: #fcfcfc;
 }
