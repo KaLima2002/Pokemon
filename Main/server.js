@@ -252,7 +252,7 @@ function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
 
 
 window.onload = async () => {
-    var AmountPokemons = 151;
+    var AmountPokemons = 800;
     let Pokemons = await ObterPokemons(AmountPokemons);
     //console.log(Pokemons);
     for (var i = 0; i < AmountPokemons; i++) {
@@ -308,4 +308,4 @@ window.onload = async () => {
     
 }
 
-//Teste commit
+//Teste commiy

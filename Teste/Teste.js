@@ -136,45 +136,15 @@ async function CallAPIPokedex(Id) {
         .catch(error => {
             console.error('Ocorreu um erro:', error);
         });
-    return{ 
-        PokedexEntry: response.flavor_text_entries[1].flavor_text,
-    };
-}
-
-
-
-async function GetPokemonsEntry(Lenght) {
-    var Pokemons = [];
-    var Lenght = Lenght
-    for (var i = 0; i < Lenght; i++) {
-        let database = await CallAPIPokedex(i + 1);
-        //let Pokedex = await CallAPIPokedex(i + 1);
-        if (database != null) {
-            //database.PokedexEntry = Pokedex.PokedexEntry;
-            Pokemons.push(database);
+        return{ 
+            PokedexEntry: response.flavor_text_entries[1].flavor_text,
         }
-    }   
-    return Pokemons;
 }
 
-async function ObterPokemons(Lenght) {
-    var Pokemons = [];
-    var Lenght = Lenght
-    for (var i = 0; i < Lenght; i++) {
-        let database = await CallAPIBase(i + 1);
-        //let Pokedex = await CallAPIPokedex(i + 1);
-        if (database != null) {
-            //database.PokedexEntry = Pokedex.PokedexEntry;
-            Pokemons.push(database);
-        }
-    }   
-    return Pokemons;
-}
-
-function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
-    var NovoCard;
+function AddCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
+    var NewCard;
     if(Type2!= undefined){
-         NovoCard = 
+         NewCard = 
             `<div id=${PokemonName}>
             <div class="Pokemon-image" id="${Type1}${Type2}${PokedexId}B">
                 <img src="${PokemonSprite}" id="PokemonSprite">
@@ -191,7 +161,7 @@ function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
         </div></div>`
     }
     else{
-         NovoCard =
+        NewCard =
             ` <div id=${PokemonName}>
             <div class="Pokemon-image" id="${Type1}${PokedexId}B">
                 <img src="${PokemonSprite}" id="PokemonSprite">
@@ -208,12 +178,12 @@ function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
     }
     const newCard = document.createElement("div");
     newCard.classList.add("card");
-    newCard.innerHTML = NovoCard;
+    newCard.innerHTML = NewCard;
     const cardsContainer = document.querySelector(".cards");
     cardsContainer.appendChild(newCard);
 }
 
- function CriarModal(PokemonName,PokedexId,PokemonSprite,PokedexEntry, Type1, Type2){
+ function CreateModal(PokemonName,PokedexId,PokemonSprite,PokedexEntry, Type1, Type2){
     const modal = document.createElement('div');
     modal.id = `${PokemonName}Modal`;
     modal.className = 'modal';
@@ -250,30 +220,36 @@ function AdicionarCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
      document.body.appendChild(modal);
 }
 
+function InsertPokemon(Pokemon){
+    let PokemonName = CapitalizeFirsty(Pokemon.PokemonName);
+        let PokedexId = Pokemon.PokedexId;
+        let PokemonSprite = Pokemon.PokemonSprite;
+        let PokemonType1 = CapitalizeFirsty(Pokemon.PokemonTypes[0].type.name);
 
-window.onload = async () => {
-    var AmountPokemons = 151;
-    let Pokemons = await ObterPokemons(AmountPokemons);
-    //console.log(Pokemons);
-    for (var i = 0; i < AmountPokemons; i++) {
-        //console.log(Pokemons[i])
-        let PokemonName = CapitalizeFirsty(Pokemons[i].PokemonName);
-        let PokedexId = Pokemons[i].PokedexId;
-        let PokemonSprite = Pokemons[i].PokemonSprite;
-        let PokemonType1 = CapitalizeFirsty(Pokemons[i].PokemonTypes[0].type.name);
-
-        if(Pokemons[i].PokemonTypes.length == 1){
-            AdicionarCard1(PokemonName,PokedexId,PokemonSprite,PokemonType1);
+        if(Pokemon.PokemonTypes.length == 1){
+            AddCard1(PokemonName,PokedexId,PokemonSprite,PokemonType1);
             CreateStyle(PokemonType1,PokedexId);
         }
-        else if(Pokemons[i].PokemonTypes.length == 2){
-            let PokemonType2 = CapitalizeFirsty(Pokemons[i].PokemonTypes[1].type.name);
-            AdicionarCard1(PokemonName,PokedexId,PokemonSprite,PokemonType1,PokemonType2);
+        else if(Pokemon.PokemonTypes.length == 2){
+            let PokemonType2 = CapitalizeFirsty(Pokemon.PokemonTypes[1].type.name);
+            AddCard1(PokemonName,PokedexId,PokemonSprite,PokemonType1,PokemonType2);
             CreateStyle(PokemonType1,PokedexId,PokemonType2);
         }
-    }
-    var PokedexEntry = await GetPokemonsEntry(AmountPokemons);
+}
 
+//Pensar em forma de deixar mais rapido, talves jogar voltar o insertPokemon para dentro do for
+window.onload = async () => {
+    var AmountPokemons = 898;
+    var Pokemons = [];
+    for (var i = 1; i < AmountPokemons+1; i++) {
+        PokemonBaseData = await CallAPIBase(i);
+        InsertPokemon(PokemonBaseData);
+        PokemonEntryData = await CallAPIPokedex(i); //Quebra no 899
+        Pokemons[i] = {
+            PokemonName: PokemonBaseData.PokemonName,
+            PokedexEntry: PokemonEntryData.PokedexEntry
+        };
+}
     Pokemons.forEach(element => {
         PokemonName = CapitalizeFirsty(element.PokemonName);
         var PokemonDiv = document.getElementById(PokemonName);
@@ -284,20 +260,18 @@ window.onload = async () => {
             var ChosenType1 = PokemonDiv.getElementsByClassName("PokemonType1")[0].textContent;
             var ChosenType2;
             var id = ChosenId.substring(1);
-            var ChosenPokedexEntry = (PokedexEntry[id-1]).PokedexEntry;
+            var ChosenPokedexEntry = Pokemons[id-1].PokedexEntry;
             if(PokemonDiv.getElementsByClassName("PokemonType2").length ==1){
                 ChosenType2 = PokemonDiv.getElementsByClassName("PokemonType2")[0].textContent;
-                CriarModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1,ChosenType2);
+                CreateModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1,ChosenType2);
                 CreateModalStyle(ChosenType1,ChosenType2);
             }
             else{
-                CriarModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1);
+                CreateModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1);
                 CreateModalStyle(ChosenType1);
             }
             var modal = document.getElementById(`${PokemonDiv.id}Modal`);
             modal.style.display = "block";
-
-
             var CloseDivPokemon = ('close'+`${PokemonDiv.id}`);
             var CloseDiv = document.getElementById(CloseDivPokemon);
             CloseDiv.addEventListener('click', () => {
@@ -305,5 +279,4 @@ window.onload = async () => {
             })
         });
     });
-    
-}
+};
