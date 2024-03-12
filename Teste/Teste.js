@@ -1,11 +1,11 @@
 function CapitalizeFirsty(Word) {
-    const firstLetter = Word.charAt(0).toUpperCase(); //Firsty Letter
+    const firstLetter = Word.charAt(0).toUpperCase(); 
     const remainingLetters = Word.substring(1);
     return firstLetter + remainingLetters;
 };
 
 function lowerFirsty(Word) {
-    const firstLetter = Word.charAt(0).toLowerCase(); //Firsty Letter
+    const firstLetter = Word.charAt(0).toLowerCase(); 
     const remainingLetters = Word.substring(1);
     return firstLetter + remainingLetters;
 };
@@ -89,7 +89,6 @@ function CreateStyle(Type1,PokedexId, Type2){
             let backgroundType2 = document.getElementById(Type2+PokedexId+"A");
             backgroundType2.style.background =Type2Color[0];
         }
-
 }
 
 function CreateModalStyle(Type1, Type2){
@@ -105,10 +104,7 @@ function CreateModalStyle(Type1, Type2){
             let backgroundType2 = document.getElementById(Type2+"Modal");
             backgroundType2.style.background =Type2Color[0];
         }
-
 }
-
-
 
 async function CallAPIBase(Id) {
     var response = {};
@@ -211,11 +207,8 @@ function AddCard1(PokemonName,PokedexId, PokemonSprite, Type1, Type2){
                 <span class="PokemonType1" id="${Type1}Modal">${Type1}</span>
             </p>
             <p id="PokedexEntry">${PokedexEntry}</p>
-            
-
     `;
     }
-
      modal.appendChild(modalContent);
      document.body.appendChild(modal);
 }
@@ -225,7 +218,6 @@ function InsertPokemon(Pokemon){
         let PokedexId = Pokemon.PokedexId;
         let PokemonSprite = Pokemon.PokemonSprite;
         let PokemonType1 = CapitalizeFirsty(Pokemon.PokemonTypes[0].type.name);
-
         if(Pokemon.PokemonTypes.length == 1){
             AddCard1(PokemonName,PokedexId,PokemonSprite,PokemonType1);
             CreateStyle(PokemonType1,PokedexId);
@@ -237,7 +229,7 @@ function InsertPokemon(Pokemon){
         }
 }
 
-//Pensar em forma de deixar mais rapido, talves jogar voltar o insertPokemon para dentro do for
+//Pensar em forma de deixar mais rapido, talvez jogar de volta o insertPokemon para dentro do for
 window.onload = async () => {
     var AmountPokemons = 898;
     var Pokemons = [];
