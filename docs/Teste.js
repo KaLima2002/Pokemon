@@ -229,7 +229,6 @@ function InsertPokemon(Pokemon){
         }
 }
 
-//Pensar em forma de deixar mais rapido, talvez jogar de volta o insertPokemon para dentro do for
 window.onload = async () => {
     var AmountPokemons = 300;
     var Pokemons = [];
