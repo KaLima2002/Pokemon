@@ -242,7 +242,7 @@ window.onload = async () => {
             PokedexEntry: PokemonEntryData.PokedexEntry
         };
 }
-    Pokemons.forEach(element => {
+    Pokemons.forEach(async (element) => {
         PokemonName = CapitalizeFirsty(element.PokemonName);
         var PokemonDiv = document.getElementById(PokemonName);
         PokemonDiv.addEventListener('click', () => {
