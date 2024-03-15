@@ -251,7 +251,7 @@ window.onload = async () => {
             var ChosenType1 = PokemonDiv.getElementsByClassName("PokemonType1")[0].textContent;
             var ChosenType2;
             var id = ChosenId.substring(1);
-            var ChosenPokedexEntry = Pokemons[id-1].PokedexEntry;
+            var ChosenPokedexEntry = Pokemons[id].PokedexEntry;
             if(PokemonDiv.getElementsByClassName("PokemonType2").length ==1){
                 ChosenType2 = PokemonDiv.getElementsByClassName("PokemonType2")[0].textContent;
                 CreateModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1,ChosenType2);
