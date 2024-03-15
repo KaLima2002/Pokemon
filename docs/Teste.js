@@ -231,7 +231,7 @@ function InsertPokemon(Pokemon){
 
 //Pensar em forma de deixar mais rapido, talvez jogar de volta o insertPokemon para dentro do for
 window.onload = async () => {
-    var AmountPokemons = 151;
+    var AmountPokemons = 30;
     var Pokemons = [];
     for (var i = 1; i < AmountPokemons+1; i++) {
         PokemonBaseData = await CallAPIBase(i);
@@ -242,7 +242,7 @@ window.onload = async () => {
             PokedexEntry: PokemonEntryData.PokedexEntry
         };
 }
-    Pokemons.forEach(element => {
+    await Pokemons.forEach(element => {
         PokemonName = CapitalizeFirsty(element.PokemonName);
         var PokemonDiv = document.getElementById(PokemonName);
         PokemonDiv.addEventListener('click', () => {
@@ -253,6 +253,8 @@ window.onload = async () => {
             var ChosenType2;
             var id = ChosenId.substring(1);
             var ChosenPokedexEntry = Pokemons[id-1].PokedexEntry;
+             var teste = await CallAPIPokedex(ChosenId);
+             console.log(teste);
             if(PokemonDiv.getElementsByClassName("PokemonType2").length ==1){
                 ChosenType2 = PokemonDiv.getElementsByClassName("PokemonType2")[0].textContent;
                 CreateModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1,ChosenType2);
