@@ -231,7 +231,7 @@ function InsertPokemon(Pokemon){
 
 //Pensar em forma de deixar mais rapido, talvez jogar de volta o insertPokemon para dentro do for
 window.onload = async () => {
-    var AmountPokemons = 898;
+    var AmountPokemons = 151;
     var Pokemons = [];
     for (var i = 1; i < AmountPokemons+1; i++) {
         PokemonBaseData = await CallAPIBase(i);
