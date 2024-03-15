@@ -255,6 +255,7 @@ window.onload = async () => {
             var ChosenPokedexEntry = Pokemons[id-1].PokedexEntry;
              var teste = await CallAPIPokedex(ChosenId);
              console.log(teste);
+             //
             if(PokemonDiv.getElementsByClassName("PokemonType2").length ==1){
                 ChosenType2 = PokemonDiv.getElementsByClassName("PokemonType2")[0].textContent;
                 CreateModal(ChosenName,ChosenId,ChosenSprite,ChosenPokedexEntry,ChosenType1,ChosenType2);
